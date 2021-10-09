@@ -32,12 +32,12 @@ export class CustomBaseEntity extends BaseEntity {
     name: 'created_at',
     nullable: true,
   })
-  createAt: Date | null;
+  createdAt: Date | null;
 
   @Column({
     type: 'timestamp without time zone',
-    name: 'update_at',
+    name: 'updated_at',
     nullable: true,
   })
-  updateAt: Date | null;
+  updatedAt: Date | null;
 }

@@ -3,6 +3,10 @@ import { IsEmail, IsString, MinLength } from 'class-validator';
 import { BaseDto } from 'src/common/dto/base.dto';
 
 export class CreateUserDto extends BaseDto {
+  @ApiProperty({ default: 'Md. Anik', required: true })
+  @IsString()
+  name: string;
+
   @ApiProperty({ default: 'anik@gmail.com', required: true })
   @IsEmail()
   email: string;

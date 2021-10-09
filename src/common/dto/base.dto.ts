@@ -3,11 +3,11 @@ import { Allow } from 'class-validator';
 import { ActiveStatus } from '../enum/active-status.enum';
 
 export abstract class BaseDto {
-  @ApiProperty({ default: 'xyz-ijk-mno-pqr', required: true })
+  // @ApiProperty({ default: 'xyz-ijk-mno-pqr', required: true })
   @Allow()
   id: string;
 
-  @ApiProperty({ default: ActiveStatus.enabled, required: true })
+  // @ApiProperty({ default: ActiveStatus.enabled, required: true })
   @Allow()
   version: number;
 
