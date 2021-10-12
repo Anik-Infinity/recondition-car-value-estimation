@@ -1,5 +1,5 @@
 
-import { CustomBaseEntity } from 'src/common/entity/custom-base.entity';
+import { CustomBaseEntity } from 'src/common/entities/custom-base.entity';
 import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from '../users/user.entity';
 

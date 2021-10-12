@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ReportsModule } from './modules/reports/reports.module';
-import { User } from './common/entity/users/user.entity';
-import { Report } from './common/entity/reports/report.entity';
+import { User } from './common/entities/users/user.entity';
+import { Report } from './common/entities/reports/report.entity';
 import { LoggerModule } from 'nestjs-pino';
 @Module({
   imports: [

@@ -1,55 +1,74 @@
 import {
   Body,
   Controller,
-  Get,
-  HttpStatus,
-  Injectable,
-  Param,
   Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
+  Query,
+  NotFoundException,
+  HttpStatus,
+  UseInterceptors,
+  ClassSerializerInterceptor
 } from '@nestjs/common';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserIdPramDto } from 'src/common/dto/users/user-id.param';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from '../../common/dto/users/create-user.dto';
-import { User } from '../../common/entity/users/user.entity';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { CreateUserDto } from 'src/common/dto/users/create-user.dto';
+import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
+import { SerializeInterceptor } from 'src/common/interceptors/serialize.interceptor';
+import { UsersService } from './users.service';
 
-@ApiTags('User')
+// @UseInterceptors(ClassSerializerInterceptor)
 @Controller('auth')
 export class UsersController {
-  constructor(
-    @InjectRepository(User)
-    private readonly userReposity: Repository<User>,
-  ) {}
+  constructor(private usersService: UsersService) { }
 
-  // get the list of all user
-  @ApiResponse({ description: 'Get the all user list', status: HttpStatus.OK })
-  @Get()
-  findAllUser() {
-    return this.userReposity.find();
-  }
-
-  // create new user
   @ApiResponse({ description: 'Create a new user', status: HttpStatus.CREATED })
   @ApiBody({ type: CreateUserDto })
-  @Post('create')
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    const user = this.userReposity.create(createUserDto);
-    await this.userReposity.save(user);
+  @Post('/signup')
+  createUser(@Body() body: CreateUserDto) {
+    const user = this.usersService.create(body);
     return user;
   }
 
-  // update user by id
+  @UseInterceptors(SerializeInterceptor)
+  @ApiResponse({ description: 'Get user by ID', status: HttpStatus.OK })
+  @Get('/:id')
+  async findUser(@Param('id') id: string) {
+    console.log('Handler is running');
+    
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    return user;
+  }
+
+  // @ApiResponse({ description: 'Get all the user by email', status: HttpStatus.OK })
+  // @Get()
+  // findAllUsers(@Query('email') email: string) {
+  //   return this.usersService.find(email);
+  // }
+
+  @ApiResponse({ description: 'Get all the user', status: HttpStatus.OK })
+  @Get()
+  findAllUsers() {
+    return this.usersService.find();
+  }
+
+  @ApiResponse({ description: 'Delete an user by id', status: HttpStatus.OK })
+  @Delete('/:id')
+  removeUser(@Param('id') id: string) {
+    return this.usersService.remove(id);
+  }
+
   @ApiResponse({
     description: 'Update an existing user',
     status: HttpStatus.OK,
   })
-  @ApiBody({ type: CreateUserDto })
-  @Post('update/:id')
-  async updateUser(@Param('id') id: UserIdPramDto, @Body() body: CreateUserDto) {
-    const user = await this.userReposity.update(id, {
-      ...body
-    });
-    return user;
+  @ApiBody({ type: UpdateUserDto })
+  @Patch('/:id')
+  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
+    return this.usersService.update(id, body);
   }
 }
