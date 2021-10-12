@@ -9,19 +9,19 @@ import {
   Query,
   NotFoundException,
   HttpStatus,
-  UseInterceptors,
-  ClassSerializerInterceptor
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/common/dto/users/create-user.dto';
 import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
-import { SerializeInterceptor } from 'src/common/interceptors/serialize.interceptor';
+import { UserDto } from 'src/common/dto/users/user.dto';
+import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { UsersService } from './users.service';
 
 // @UseInterceptors(ClassSerializerInterceptor)
+@Serialize(UserDto)
 @Controller('auth')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
 
   @ApiResponse({ description: 'Create a new user', status: HttpStatus.CREATED })
   @ApiBody({ type: CreateUserDto })
@@ -31,12 +31,11 @@ export class UsersController {
     return user;
   }
 
-  @UseInterceptors(SerializeInterceptor)
   @ApiResponse({ description: 'Get user by ID', status: HttpStatus.OK })
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     console.log('Handler is running');
-    
+
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('user not found');
