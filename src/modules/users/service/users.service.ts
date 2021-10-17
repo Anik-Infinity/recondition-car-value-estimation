@@ -13,8 +13,8 @@ export class UsersService {
   ) {}
 
   create(name: string, email: string, password: string) {
-    let user = this.userRepository.create({ name, email, password });
-    user = this.requestService.forCreateEntity<User>(user);
+    const userEntityInstance = this.userRepository.create({ name, email, password });
+    const user = this.requestService.forCreateEntity<User>(userEntityInstance);
     return this.userRepository.save(user);
   }
 

@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/common/dto/users/create-user.dto';
+import { SignInUserDto } from 'src/common/dto/users/signin-user.dto';
 import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
 import { UserDto } from 'src/common/dto/users/user.dto';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
@@ -33,6 +34,13 @@ export class UsersController {
   createUser(@Body() createUserDto: CreateUserDto) {
     const user = this.authService.signup(createUserDto);
     return user;
+  }
+
+  @ApiResponse({ description: 'User signin', status: HttpStatus.OK })
+  @Post('/signin')
+  @ApiBody({ type: SignInUserDto })
+  signin(@Body() body: SignInUserDto) {
+    return this.authService.signin(body);
   }
 
   @ApiResponse({ description: 'Get user by ID', status: HttpStatus.OK })
