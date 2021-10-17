@@ -27,7 +27,7 @@ import { LoggerModule } from 'nestjs-pino';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        //prettyPrint: true,
+        prettyPrint: true,
 
         // Define a custom logger level
         customLogLevel: function (res, err) {
@@ -61,22 +61,22 @@ import { LoggerModule } from 'nestjs-pino';
         },
 
         // Override request and response body
-        serializers: {
-          res: (res) => {
-            const { statusCode } = res;
-            return { statusCode: statusCode };
-          },
-          req: (req) => {
-            const { method, url, query, params } = req;
-            return {
-              method: method,
-              url: url,
-              query: query,
-              params: params
-            }
-          },
+        // serializers: {
+        //   res: (res) => {
+        //     const { statusCode } = res;
+        //     return { statusCode: statusCode };
+        //   },
+        //   req: (req) => {
+        //     const { method, url, query, params } = req;
+        //     return {
+        //       method: method,
+        //       url: url,
+        //       query: query,
+        //       params: params
+        //     }
+        //   },
 
-        },
+        // },
       },
     }),
   ],
