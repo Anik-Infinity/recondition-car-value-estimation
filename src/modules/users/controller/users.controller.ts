@@ -12,10 +12,12 @@ import {
   Session,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
+import { CurrentUser } from 'src/common/decoratos/current-user.decorator';
 import { CreateUserDto } from 'src/common/dto/users/create-user.dto';
 import { SignInUserDto } from 'src/common/dto/users/signin-user.dto';
 import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
 import { UserDto } from 'src/common/dto/users/user.dto';
+import { User } from 'src/common/entities/users/user.entity';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { AuthService } from '../service/auth.service';
 import { UsersService } from '../service/users.service';
@@ -33,9 +35,14 @@ export class UsersController {
 
 
   // Show the currently logedIn user
-  @Get('whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  // @Get('whoami')
+  // whoAmI(@Session() session: any) {
+  //   return this.usersService.findOne(session.userId);
+  // }
+
+  @Get('/whoami')
+  whioAmI(@CurrentUser() user: string) {
+    return user;
   }
 
   // Signout current user
