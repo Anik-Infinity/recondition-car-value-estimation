@@ -7,7 +7,7 @@ import {
   Delete,
   Param,
   Query,
-  NotFoundException,
+  NotFoundException,]
   HttpStatus,
   Session,
 } from '@nestjs/common';
@@ -27,6 +27,7 @@ import { UsersService } from '../service/users.service';
 // Expose only public data while response
 @Serialize(UserDto)
 @Controller('auth')
+
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -41,7 +42,7 @@ export class UsersController {
   // }
 
   @Get('/whoami')
-  whioAmI(@CurrentUser() user: string) {
+  whioAmI(@CurrentUser() user: User) {
     return user;
   }
 
