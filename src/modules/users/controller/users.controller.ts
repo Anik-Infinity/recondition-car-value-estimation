@@ -7,9 +7,10 @@ import {
   Delete,
   Param,
   Query,
-  NotFoundException,]
+  NotFoundException,
   HttpStatus,
   Session,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { CurrentUser } from 'src/common/decoratos/current-user.decorator';
@@ -18,6 +19,7 @@ import { SignInUserDto } from 'src/common/dto/users/signin-user.dto';
 import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
 import { UserDto } from 'src/common/dto/users/user.dto';
 import { User } from 'src/common/entities/users/user.entity';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { AuthService } from '../service/auth.service';
 import { UsersService } from '../service/users.service';
@@ -42,6 +44,7 @@ export class UsersController {
   // }
 
   @Get('/whoami')
+  @UseGuards(AuthGuard)
   whioAmI(@CurrentUser() user: User) {
     return user;
   }

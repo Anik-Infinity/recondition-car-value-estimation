@@ -7,7 +7,7 @@ import { AuthService } from './service/auth.service';
 import { UsersController } from './controller/users.controller';
 import { UsersService } from './service/users.service';
 import { RequestService } from 'src/common/services/request.service';
-import { CurrentUserIntercepter } from 'src/common/interceptors/current-user.intercepter';
+import { CurrentUserInterceptor } from 'src/common/interceptors/current-user.intercepter';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Report])],
@@ -18,7 +18,7 @@ import { CurrentUserIntercepter } from 'src/common/interceptors/current-user.int
     RequestService,
     {
       provide: APP_INTERCEPTOR,
-      useClass: CurrentUserIntercepter,
+      useClass: CurrentUserInterceptor,
     },
   ],
 })
