@@ -1,16 +1,16 @@
 import {
   Body,
   Controller,
-  Post,
-  Get,
-  Patch,
   Delete,
-  Param,
-  Query,
-  NotFoundException,
+  Get,
   HttpStatus,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
   Session,
   UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { CurrentUser } from 'src/common/decoratos/current-user.decorator';
@@ -20,6 +20,7 @@ import { UpdateUserDto } from 'src/common/dto/users/update-user.dto';
 import { UserDto } from 'src/common/dto/users/user.dto';
 import { User } from 'src/common/entities/users/user.entity';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/common/interceptors/current-user.intercepter';
 import { Serialize } from 'src/common/interceptors/serialize.interceptor';
 import { AuthService } from '../service/auth.service';
 import { UsersService } from '../service/users.service';
@@ -27,15 +28,14 @@ import { UsersService } from '../service/users.service';
 // @UseInterceptors(ClassSerializerInterceptor)
 // Controller bounded interceptor
 // Expose only public data while response
+@UseInterceptors((CurrentUserInterceptor))
 @Serialize(UserDto)
 @Controller('auth')
-
 export class UsersController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
   ) {}
-
 
   // Show the currently logedIn user
   // @Get('whoami')
@@ -46,6 +46,7 @@ export class UsersController {
   @Get('/whoami')
   @UseGuards(AuthGuard)
   whioAmI(@CurrentUser() user: User) {
+    console.log('who am i called', user);
     return user;
   }
 
@@ -61,7 +62,8 @@ export class UsersController {
   @Post('/signup')
   async createUser(
     @Body() createUserDto: CreateUserDto,
-    @Session() session: any,) {
+    @Session() session: any,
+  ) {
     const user = await this.authService.signup(createUserDto);
     session.userId = user.id;
     return user;
@@ -79,9 +81,8 @@ export class UsersController {
 
   // Get an user by ID
   @ApiResponse({ description: 'Get user by ID', status: HttpStatus.OK })
-  @Get('/:id')
+  @Get('find-user/:id')
   async findUser(@Param('id') id: string) {
-    console.log('Handler is running');
 
     const user = await this.usersService.findOne(id);
     if (!user) {
@@ -92,7 +93,7 @@ export class UsersController {
 
   // Get the list of users
   @ApiResponse({ description: 'Get all the user', status: HttpStatus.OK })
-  @Get()
+  @Get('user-list')
   findAllUsers() {
     return this.usersService.find();
   }

@@ -16,10 +16,12 @@ import { CurrentUserInterceptor } from 'src/common/interceptors/current-user.int
     UsersService,
     AuthService,
     RequestService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentUserInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CurrentUserInterceptor,
+    // },
+    CurrentUserInterceptor
   ],
+  exports:[UsersService]
 })
 export class UsersModule {}

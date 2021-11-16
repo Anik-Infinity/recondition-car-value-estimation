@@ -25,60 +25,60 @@ import { LoggerModule } from 'nestjs-pino';
       logging: true,
       entities: [User, Report],
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        prettyPrint: true,
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     prettyPrint: true,
 
-        // Define a custom logger level
-        customLogLevel: function (res, err) {
-          if (res.statusCode >= 400 && res.statusCode < 500) {
-            return 'warn';
-          } else if (res.statusCode >= 500 || err) {
-            return 'error';
-          }
-          return 'info';
-        },
+    //     // Define a custom logger level
+    //     customLogLevel: function (res, err) {
+    //       if (res.statusCode >= 400 && res.statusCode < 500) {
+    //         return 'warn';
+    //       } else if (res.statusCode >= 500 || err) {
+    //         return 'error';
+    //       }
+    //       return 'info';
+    //     },
 
-        // Define a custom success message
-        customSuccessMessage: function (res) {
-          if (res.statusCode === 404) {
-            return 'resource not found';
-          }
-          return 'request completed';
-        },
+    //     // Define a custom success message
+    //     customSuccessMessage: function (res) {
+    //       if (res.statusCode === 404) {
+    //         return 'resource not found';
+    //       }
+    //       return 'request completed';
+    //     },
 
-        // Define a custom error message
-        customErrorMessage: function (error, res) {
-          return 'request errored with status code: ' + res.statusCode;
-        },
+    //     // Define a custom error message
+    //     customErrorMessage: function (error, res) {
+    //       return 'request errored with status code: ' + res.statusCode;
+    //     },
 
-        // Override attribute keys for the log object
-        customAttributeKeys: {
-          req: 'request',
-          res: 'response',
-          err: 'error',
-          responseTime: 'timeTaken',
-        },
+    //     // Override attribute keys for the log object
+    //     customAttributeKeys: {
+    //       req: 'request',
+    //       res: 'response',
+    //       err: 'error',
+    //       responseTime: 'timeTaken',
+    //     },
 
-        // Override request and response body
-        // serializers: {
-        //   res: (res) => {
-        //     const { statusCode } = res;
-        //     return { statusCode: statusCode };
-        //   },
-        //   req: (req) => {
-        //     const { method, url, query, params } = req;
-        //     return {
-        //       method: method,
-        //       url: url,
-        //       query: query,
-        //       params: params
-        //     }
-        //   },
+    //     // Override request and response body
+    //     // serializers: {
+    //     //   res: (res) => {
+    //     //     const { statusCode } = res;
+    //     //     return { statusCode: statusCode };
+    //     //   },
+    //     //   req: (req) => {
+    //     //     const { method, url, query, params } = req;
+    //     //     return {
+    //     //       method: method,
+    //     //       url: url,
+    //     //       query: query,
+    //     //       params: params
+    //     //     }
+    //     //   },
 
-        // },
-      },
-    }),
+    //     // },
+    //   },
+    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
